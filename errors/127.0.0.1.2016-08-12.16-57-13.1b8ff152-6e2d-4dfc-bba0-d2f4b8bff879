@@ -1,0 +1,21 @@
+(dp1
+S'output'
+p2
+S"<type 'exceptions.NameError'> global name 'pickk_id' is not defined"
+p3
+sS'layer'
+p4
+S'/home/jmsa/Documents/web2py/applications/pikingangular/controllers/default.py'
+p5
+sS'code'
+p6
+S'# -*- coding: utf-8 -*-\nimport gluon.contrib.simplejson\n\ndef get_pick(pick_id):\n    pick= db(db.pickings.id==pick_id).select().first().as_dict()\n    return pick\n\ndef add_pik():\n    new_pick=gluon.contrib.simplejson.loads(request.body.read())\n    pick_id=db.pickings.validate_and_insert(barcode=new_pick[\'barcode\'])\n    new_pick=get_pick(pickk_id)\n    return  gluon.contrib.simplejson.dumps(dict(newPick=new_pick))\n\ndef index():\n    rows = db(db.pickings).select().as_list()\n    return dict(pick_list=gluon.contrib.simplejson.dumps(rows))\n\n\ndef user():\n    """\n    exposes:\n    http://..../[app]/default/user/login\n    http://..../[app]/default/user/logout\n    http://..../[app]/default/user/register\n    http://..../[app]/default/user/profile\n    http://..../[app]/default/user/retrieve_password\n    http://..../[app]/default/user/change_password\n    http://..../[app]/default/user/bulk_register\n    use @auth.requires_login()\n        @auth.requires_membership(\'group name\')\n        @auth.requires_permission(\'read\',\'table name\',record_id)\n    to decorate functions that need access control\n    also notice there is http://..../[app]/appadmin/manage/auth to allow administrator to manage users\n    """\n    return dict(form=auth())\n\n\n@cache.action()\ndef download():\n    """\n    allows downloading of uploaded files\n    http://..../[app]/default/download/[filename]\n    """\n    return response.download(request, db)\n\n\ndef call():\n    """\n    exposes services. for example:\n    http://..../[app]/default/call/jsonrpc\n    decorate with @services.jsonrpc the functions to expose\n    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv\n    """\n    return service()\n\nresponse._vars=response._caller(add_pik)\n'
+p7
+sS'snapshot'
+p8
+(dp9
+sS'traceback'
+p10
+S'Traceback (most recent call last):\n  File "/home/jmsa/Documents/web2py/gluon/restricted.py", line 227, in restricted\n    exec ccode in environment\n  File "/home/jmsa/Documents/web2py/applications/pikingangular/controllers/default.py", line 56, in <module>\n  File "/home/jmsa/Documents/web2py/gluon/globals.py", line 417, in <lambda>\n    self._caller = lambda f: f()\n  File "/home/jmsa/Documents/web2py/applications/pikingangular/controllers/default.py", line 11, in add_pik\n    new_pick=get_pick(pickk_id)\nNameError: global name \'pickk_id\' is not defined\n'
+p11
+s.

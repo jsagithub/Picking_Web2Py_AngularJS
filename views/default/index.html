@@ -1,0 +1,60 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+{{extend 'layout.html'}}
+<script>
+    //Note AngularJS code is included within the layout
+var demoAngular = angular.module('demoAngular', []);
+
+demoAngular.config(function($interpolateProvider) {
+    //allow Web2py views and Angular to co-exist
+    $interpolateProvider.startSymbol('{[{');
+    $interpolateProvider.endSymbol('}]}');
+});
+
+demoAngular.controller('demoAngularCtrl', function($scope, $http) {
+    $scope.pickList = {{=XML(pick_list)}};                      
+    $scope.newPick = {};
+
+    $scope.savePick = function(){
+        //Save to database
+        if($("#barcode").val().length==13)
+        {            
+            $http.put('{{=URL('default','add_pick')}}', $scope.newPick)
+            .success(function(data, status) {
+                $scope.pickList.push(data.newPick); //add the new Pick to the Pick list
+                $scope.newPick = {}; //reset the new Pick
+            });
+        }
+    };
+});
+</script>
+<div class="container" ng-app='demoAngular'>
+   <div class="row" ng-controller='demoAngularCtrl'>
+     <!-- Show Errors Messages-->
+     <div ng-show='errorMessage'>
+            <h3>Error Message</h3>
+            <p>{[{errorMessage}]}</p>
+            <p ng-click='errorMessage=""'>Click here to clear error message.</p>
+     </div>
+     <!-- End Show Errors-->
+     <div class="col-xs-12">
+        <!-- Sow Tasks -->
+         <h2>Picks</h2>
+            <ul>
+               <li ng-repeat='picks in pickList'>
+                   {[{picks.barcode}]}
+              </li>
+            </ul>
+        <!-- End Show Task -->
+        <div>
+           <h3>Add Pick</h3>
+           <div>newPick: {[{newPick}]}</div>
+           <!-- Form Add new Pick-->
+           <div>
+              <div><input type='text' id="barcode" ng-model='newPick.barcode' placeholder='Barcode' ng-change="savePick()"></div>             
+           </div>
+           <!-- End Form Add new Task -->
+        </div>
+     </div>
+  </div>
+</div>
